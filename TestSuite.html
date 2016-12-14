@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="TestFunctions.js"></script>
+    <meta charset="UTF-8">
+    <h2>BillMe Test Suite</h2>
+    <h4>We'll be testing front end functions for handling input</h4>
+
+</head>
+<body>
+
+<script>
+
+/**
+ * Login.html
+ */
+    document.write("Check good login input: ");
+    if(!required("",""))
+    {
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+
+    document.write("<br>Catch empty user input: ");
+    if(!required("","Words"))
+    {
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+
+    document.write("<br>Catch empty password input: ");
+    if(!required("Words",""))
+    {
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+
+    document.write("<br>Catch empty login input: ");
+    if(required("Words","Words"))
+    {
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+
+/**
+ * Home.html
+ */
+    document.write("<br>Check good totalPaid input: ");
+    if(HomeRequired("100")){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>Catch bad totalPaid input: ");
+    if(!HomeRequired("")){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+
+/**
+ * Bills.html
+ */
+    document.write("<br>Check good bill input: ");
+    if(BillsRequired("words", "13", "12-6-12"))
+    {
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>Catch bad bill name input: ");
+    if(!BillsRequired("", "13", "12-6-12"))
+    {
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>Catch bad totalDue input: ");
+    if(!BillsRequired("words", "", "12-6-12"))
+    {
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>Catch bad dueDate input: ");
+    if(!BillsRequired("words", "13", ""))
+    {
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+
+/**
+ * Payers.html
+ */
+    document.write("<br>Check good payer input: ");
+    if(PayersRequired("Payer")){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>Catch bad payer input: ");
+    if(!PayersRequired("")){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+
+/**
+ * CreatePayer.html
+  */
+    document.write("<br>Check good new payer input: ");
+    if(CreatePayerRequired("Payer", "password", "groupName", "groupAdmin", true)){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>Catch bad user input: ");
+    if(!CreatePayerRequired("", "password", "groupName", "groupAdmin", true)){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>Catch bad password input: ");
+    if(!CreatePayerRequired("Payer", "", "groupName", "groupAdmin", true)){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>Catch bad groupName input: ");
+    if(!CreatePayerRequired("Payer", "password", "", "groupAdmin", true)){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>YesNoCheck false: ");
+    if(CreatePayerRequired("Payer", "password", "groupName", "groupAdmin", false)){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+    document.write("<br>Catch YesNoCheck true with bad groupAdmin input: ");
+    if(!CreatePayerRequired("Payer", "password", "groupName", "", true)){
+        document.write("PASSED");
+    }
+    else
+    {
+        document.write("FAILED");
+    }
+</script>
+
+</body>
+</html>
