@@ -1,5 +1,53 @@
+<?php
+/*
+*	View session
+*/
+   include('Session.php');
+   if($_SESSION['GroupAdmin'] == '')
+    {
+        header('Location: index.html');
+    }
+	
+	session_start();
+
+	$totalDue = 0;
+	$totalPaid = 0;
+	$totalDueArray = Array();
+	$billNameArray = Array();
+    $query = "SELECT TotalDue,TotalPaid,Name FROM Bills";
+    if ($result = $mysqli->query($query)) 
+    {        
+        while ($row = $result->fetch_assoc()) 
+        {
+			$totalDue = $totalDue + $row["TotalDue"];
+			$totalPaid = $totalPaid + $row["TotalPaid"];
+			array_push($totalDueArray,$row["TotalDue"]);
+			array_push($billNameArray,$row["Name"]);
+		}		
+	}
+	$_SESSION['TotalPaid'] = $totalPaid;
+	$_SESSION['RemainingDue'] = $totalDue - $totalPaid;
+	$_SESSION['Percentage'] = round(($totalPaid / $totalDue *100),2);
+	$_SESSION['BillNames'] = $billNameArray;
+	$_SESSION['AmountsDue'] = $totalDueArray;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+  
+<style>
+	.donut-inner 
+	{
+          margin-top: -200px;
+          margin-bottom: 200px;
+	}
+	.donut-inner span 
+	{
+           font-size: 40px;
+	}
+</style>
+
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +73,8 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
+
+
 
   <body>
 
@@ -292,6 +342,9 @@
 							  <h4><i class="fa fa-angle-right"></i> Doughnut</h4>
                               <div class="panel-body text-center">
                                   <canvas id="doughnut" height="300" width="400"></canvas>
+				  <div class="donut-inner">
+				    <span><?php echo $_SESSION['Percentage'];?>%</span>
+				  </div>
                               </div>
                           </div>
                       </div>
@@ -344,18 +397,7 @@
               <!-- page end-->
           </section>          
       </section><!-- /MAIN CONTENT -->
-
       <!--main content end-->
-      <!--footer start-->
-      <footer class="site-footer">
-          <div class="text-center">
-              2014 - Alvarez.is
-              <a href="chartjs.html#" class="go-top">
-                  <i class="fa fa-angle-up"></i>
-              </a>
-          </div>
-      </footer>
-      <!--footer end-->
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
@@ -371,16 +413,54 @@
 
     <!--script for this page-->
     <script src="assets/js/chart-master/Chart.js"></script>
-    <script src="assets/js/chartjs-conf.js"></script>
-    
-  <script>
-      //custom select box
-
-      $(function(){
-          $('select.styled').customSelect();
-      });
-
-  </script>
+    <script type="text/javascript" src="assets/js/chartjs-conf.js"></script>
+	<script type="text/javascript">
+		charts.init([<?php echo $_SESSION['TotalPaid'];?>, <?php echo $_SESSION['RemainingDue'];?>]);
+		charts.doughnut();
+		var ctx = document.getElementById("pie").getContext('2d');
+		var myChart = new Chart(ctx, {
+			type: 'pie',
+			data: {
+			labels: [ <?php
+					$i = 0;
+					$len = count($_SESSION['BillNames']);
+					foreach($_SESSION['BillNames'] as $name)
+					{
+						echo "\"";
+						echo $name;
+						echo "\"";
+						if($i != $len-1)
+						{
+							echo ",";
+						}
+						$i++;
+					}
+					?>],			
+			datasets: 
+			[{
+				backgroundColor: 
+				[
+				"#2ecc71",
+				"#3498db"
+				],
+				data: [<?php
+					$i = 0;
+					$len = count($_SESSION['AmountsDue']);
+					foreach($_SESSION['AmountsDue'] as $amt)
+					{
+						echo $amt;
+						if($i != $len-1)
+						{
+							echo ",";
+						}
+						$i++;
+					}
+					?>]
+			}]
+			}
+		});
+	</script>
+	
 
   </body>
 </html>

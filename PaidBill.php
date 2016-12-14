@@ -1,29 +1,35 @@
 <?php
-    
-/**
-* sql configuration
-*/
+
 $mysqli = new mysqli("mysql.eecs.ku.edu", "slopez", "Password123!", "slopez");
 
-/**
-*	Check to see if SQL server is properly connected
-*/
 if ($mysqli->connect_errno) 
 {
 	printf("Connect failed: %s\n", $mysqli->connect_error);
 	exit();
 }
 
-/**
- * Allows for reading of stored session variables, and for ability to store session variables
- */
 session_start();
 
 $groupAdmin = $_SESSION['GroupAdmin'];
-
+$totalDue = 0;
+$dueDate = "";
 $billName = $_POST['Name'];
 if(!empty($_POST['Name'])) 
 {
+    
+    $query = "SELECT TotalDue,DueDate FROM Bills WHERE GroupAdmin = '$groupAdmin' AND Name = '$billName'";
+    if ($result = $mysqli->query($query)) 
+    {        
+        while ($row = $result->fetch_assoc()) 
+        {
+			$totalDue = $row["TotalDue"];
+			$dueDate = $row["DueDate"];
+		}
+    }
+	
+    $query = "INSERT INTO PaidBills (Name,TotalDue,DueDate,GroupAdmin) VALUES ('$billName','$totalDue','$dueDate','$groupAdmin')";
+    if ($result = $mysqli->query($query)){}
+
     /**
     * Deletes the bill based on the name and the associated group.
     */
@@ -33,12 +39,13 @@ if(!empty($_POST['Name']))
     $query = "DELETE FROM UserBills WHERE Name = '$billName' AND GroupAdmin = '$groupAdmin' ";
     if ($result = $mysqli->query($query)) {}
 
-    header("Location: Bills.html");
+
+    header("Location: UserBills.html");
     $result->free();
 }
 else
 {
-	header("Location: Bills.html");
+	echo"hi";
 }
 		
 ?>

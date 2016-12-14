@@ -14,6 +14,6 @@ session_start();
 
 
 if(!isset($_SESSION['PayerID'])){
-  header("location:Login.html");
+  header("location:login.html");
 }
 ?>

@@ -1,12 +1,18 @@
 <?php
-/*
-*	View session
-*/
    include('Session.php');
-   if($_SESSION['GroupAdmin'] == '')
-    {
-        header('Location: index.html');
-    }
+   session_start();
+
+	$billNameArray = Array();
+    $query = "SELECT Name FROM PaidBills ORDER BY Name,DueDate ASC";
+    if ($result = $mysqli->query($query)) 
+    {        
+        while ($row = $result->fetch_assoc()) 
+        {
+			array_push($billNameArray,$row["Name"]);
+		}		
+	}
+
+	$_SESSION['BillNames'] = $billNameArray;
 ?>
 <style>
 select {
@@ -33,6 +39,8 @@ select {
     <!-- Custom styles for this template -->
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/style-responsive.css" rel="stylesheet">
+    <script src="assets/js/chart-master/Chart.js"></script>
+
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -150,94 +158,50 @@ select {
       <!--main content start-->
       <section id="main-content">
           <section class="wrapper">
-          	<h3><i class="fa fa-angle-right"></i> Personal</h3>
+		  	  <h3><i class="fa fa-angle-right"></i> History</h3>
+
 				<div class="row">					                                                        
-
               <div class="row mt">
-                  <div class="col-md-12">
-                      <div class="content-panel">
-                          <table class="table table-striped table-advance table-hover">
-	                  	  	  <h4><i class="fa fa-angle-right"></i> Owed To Group</h4>
-	                  	  	  <hr>
-                              <thead>
-                              <tr>
-                                  <th><i class="fa fa-bullhorn"></i>Bill</th>
-                                  <th class="hidden-phone"><i class="fa fa-question-circle"></i> Amount Owed</th>
-                                  <th><i class="fa fa-bookmark"></i> Amount Paid</th>
-                                  <th><i class=" fa fa-edit"></i> Due Date</th>
-                                  <th></th>
-                              </tr>
-                              </thead>
-                              <tbody>
-                                  <?php include 'UserBills.php';?>
-                              </tbody>
-                          </table>
-						</form> 
-                      </div><!-- /content-panel -->
-                  </div><!-- /col-md-12 -->
-              </div><!-- /row -->
-			  
-			  <div class="row mt">
-                  <div class="col-md-12">
-                      <div class="content-panel">
-						<form method="post" id="table" name = "form" >
-                          <table class="table table-striped table-advance table-hover">
-	                  	  	  <h4><i class="fa fa-angle-right"></i> Added By Me</h4>
-	                  	  	  <hr>
-                              <thead>
-                              <tr>
-                                  <th><i class="fa fa-bullhorn"></i> Bill</th>
-                                  <th class="hidden-phone"><i class="fa fa-question-circle"></i> Amount Owed</th>
-                                  <th><i class="fa fa-bookmark"></i> Amount Paid</th>
-								  <th><i class="fa fa-bookmark"></i> Split Cost</th>
-                                  <th><i class=" fa fa-edit"></i> Due Date</th>
-                                  <th>Paid?</th>
-                              </tr>
-                              </thead>
-                              <tbody>
-                                  <?php include 'AssignedBills.php';?>
-                              </tbody>
-                          </table>
-						</form> 
-                      </div><!-- /content-panel -->
-                  </div><!-- /col-md-12 -->
-              </div><!-- /row -->
-
-		<div class="row mt">
-          		<div class="col-lg-12">
-          			<div class="content-panel">
-                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Confirm Payment</h4>
-                      <form class="form-inline" action="Pay.php" method="post" id="frontEnd" name = "form1" onsubmit="return required()">
-			<select name = "selectOption">
-    			<?php
-   			 session_start();
-    		       	 $groupAdmin = $_SESSION['GroupAdmin'];
-   			 $payerID = $_SESSION['PayerID'];
-		         $query = "SELECT Name FROM UserBills WHERE PayerID = '$payerID' AND GroupAdmin = '$groupAdmin'";
-		         if ($result = $mysqli->query($query)) 
-		         {        
-			        while ($row = $result->fetch_assoc()) 
-		        	{                
-	        		    echo 
-			            "
-				      <option value={$row['Name']}>{$row['Name']}</option>                        
-			            ";                                                
-			        }
-			        $result->free();
-			 }
-		        ?>	
-			</select>                          
-                          <div class="form-group">
-                              <label class="sr-only">Amount Paid</label>
- 			      <input type="number" class="form-control" step= 0.01 min = 0 name="totalPaid" id="totalPaid" pattern="[0-9]*" placeholder="Amount"/>
-                          </div>			  						  
-                          <button type="submit" class="btn btn-theme">OK</button>
-						  <br>
-			<div id="main"></div>
-                      </form>
-          			</div><!-- /form-panel -->
-          		</div><!-- /col-lg-12 -->
-          	</div><!-- /row -->
+              <div class="col-md-12">			
+				  <div class="tab-pane" id="chartjs">
+                  <div class="row mt">
+                      <div class="col-md-6">
+                          <div class="content-panel">
+							  <h4><i class="fa fa-angle-right"></i> Progression</h4>
+                              <div class="panel-body text-center">
+                              <canvas id="line" height="300" width="400"></canvas>
+                              </div>
+                          </div>
+                      </div>    
+					  <div class="col-md-6">
+                          <div class="content-panel">
+							  <h4><i class="fa fa-angle-right"></i> Comparison</h4>
+                              <div class="panel-body text-center">
+                              <canvas id="bar" height="300" width="400"></canvas>
+                              </div>
+                          </div>
+                      </div>    
+                  </div>
+              </div>				  
+              <div class="content-panel">
+              <table class="table table-striped table-advance table-hover">
+	          <h4><i class="fa fa-angle-right"></i> Paid Bills</h4>
+	          <hr>
+              <thead>
+              <tr>
+                <th><i class="fa fa-bullhorn"></i>Bill</th>
+                <th class="hidden-phone"><i class="fa fa-question-circle"></i> Amount Paid</th>
+				<th class="hidden-phone"><i class="fa fa-question-circle"></i> Due Date</th>
+              </tr>
+              </thead>
+              <tbody>
+                <?php include 'history.php';?>
+              </tbody>
+              </table>
+             </div><!-- /content-panel -->
+             </div><!-- /col-md-12 -->
+             </div><!-- /row --> 	
+			 </div>
 
 		</section> 
       </section>
@@ -257,6 +221,182 @@ select {
     <script src="assets/js/common-scripts.js"></script>
 
     <!--script for this page-->
+	<script src="assets/js/chart-master/Chart.js"></script>
+    <script type="text/javascript" src="assets/js/chartjs-conf.js"></script>
+	<script type="text/javascript">
+		<?php
+				$previousName = "";
+				$labelArray = Array();
+				$countArray = Array();
+				$num = 1;
+				foreach($_SESSION['BillNames'] as $name)
+				{
+					if($previousName != $name) 
+					{
+						array_push($labelArray, $name);
+						array_push($countArray, $num);
+						$num = 1;
+						$previousName = $name;
+					}
+					else
+					{
+						$num = $num + 1;
+					}
+				}
+				
+				$maxRec = 0;
+				foreach($countArray as $arr)
+				{
+					if($maxRec <= $arr)
+					{
+						$maxRec = $arr;
+					}
+				}
+				$input = array(0);
+				$result = array_pad($input, $maxRec, 0);
+				$_SESSION['MaxRecord'] = $result;							
+				$_SESSION['HistoryLabels'] = $labelArray;
+		?>
+		
+		var ctx = document.getElementById('line').getContext('2d');
+		var myChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: 
+			[<?php
+				$i = 0;
+				$len = count($_SESSION['MaxRecord']);
+				foreach($_SESSION['MaxRecord'] as $rec)
+				{
+					$j = $i + 1;
+					echo "\"";	echo $j;  echo "\"";
+					if($i != $len-1)
+					{echo ",";}
+					$i= $i + 1;
+				}
+			?>],
+			datasets: 
+			[{	 
+				<?php
+				$count = 0;				
+				$len = count($_SESSION['HistoryLabels']);
+				foreach($_SESSION['HistoryLabels'] as $label)
+				{					
+					$totalDueArray = Array();
+					$query = "SELECT TotalDue FROM PaidBills WHERE Name = '$label' ORDER BY Name,DueDate ASC";
+					if ($result = $mysqli->query($query)) 
+					{        
+						while ($row = $result->fetch_assoc()) 
+						{
+							$temp = $row["TotalDue"];
+							array_push($totalDueArray, $temp);
+						}		
+					}
+					echo "label: \"";
+					echo $label;
+					echo "\", ";					
+					echo "data: [";
+					
+					$k = 0;
+					$length = count($totalDueArray);
+					foreach($totalDueArray as $totalDue)
+					{
+						echo $totalDue;
+						if($k != $length - 1)
+						{echo ", ";}
+						$k = $k + 1;
+					}
+					echo "], ";
+					echo "backgroundColor: \"rgba(";
+					echo rand(0,255);
+					echo ",";
+					echo rand(0,255);
+					echo ",";
+					echo rand(0,255);
+					echo ",";
+					echo "0.6)\"";
+					
+					if($count != $len-1)
+					{
+						echo "}, {";
+					}
+					$count = $count + 1;
+				}
+				?>											
+			}]
+			}
+		});
+		
+		var ctx = document.getElementById('bar').getContext('2d');
+		var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: 
+			[<?php
+				$i = 0;
+				$len = count($_SESSION['MaxRecord']);
+				foreach($_SESSION['MaxRecord'] as $rec)
+				{
+					$j = $i + 1;
+					echo "\"";	echo $j;  echo "\"";
+					if($i != $len-1)
+					{echo ",";}
+					$i= $i + 1;
+				}
+			?>],
+			datasets: 
+			[{	 
+				<?php
+				$count = 0;				
+				$len = count($_SESSION['HistoryLabels']);
+				foreach($_SESSION['HistoryLabels'] as $label)
+				{					
+					$totalDueArray = Array();
+					$query = "SELECT TotalDue FROM PaidBills WHERE Name = '$label' ORDER BY Name,DueDate ASC";
+					if ($result = $mysqli->query($query)) 
+					{        
+						while ($row = $result->fetch_assoc()) 
+						{
+							$temp = $row["TotalDue"];
+							array_push($totalDueArray, $temp);
+						}		
+					}
+					echo "label: \"";
+					echo $label;
+					echo "\", ";					
+					echo "data: [";
+					
+					$k = 0;
+					$length = count($totalDueArray);
+					foreach($totalDueArray as $totalDue)
+					{
+						echo $totalDue;
+						if($k != $length - 1)
+						{echo ", ";}
+						$k = $k + 1;
+					}
+					echo "], ";
+					echo "backgroundColor: \"rgba(";
+					echo rand(0,255);
+					echo ",";
+					echo rand(0,255);
+					echo ",";
+					echo rand(0,255);
+					echo ",";
+					echo "0.6)\"";
+					
+					if($count != $len-1)
+					{
+						echo "}, {";
+					}
+					$count = $count + 1;
+				}
+				?>											
+			}]
+			}
+		});
+		
+	</script>
     
   <script>
 	var warning = false;
