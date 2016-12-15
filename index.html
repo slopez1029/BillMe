@@ -22,6 +22,8 @@
 	$_SESSION['Percentage'] = round(($totalPaid / $totalDue *100),2);
 	$_SESSION['BillNames'] = $billNameArray;
 	$_SESSION['AmountsDue'] = $totalDueArray;
+
+	$email = $_SESSION['Email'];
 ?>
 
 <!DOCTYPE html>

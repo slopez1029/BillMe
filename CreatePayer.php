@@ -8,7 +8,7 @@ $payerID = $_POST['name'];
 $password = $_POST['password'];
 $groupName = $_POST['group'];
 $groupAdmin = $_POST['groupAdmin'];
-$join = $_POST['groupAdmin'];
+$join = $false;
 $email = $_POST['email'];
 /**
  * Checks to see if SQL connection is properly configured
@@ -44,7 +44,7 @@ if($groupAdmin != "")
    * If a new user seeking to create an account wants to join an existing group upon creation, this query is to check if the entered group exists by comparing the entered post value for groupAdmin
    */
     $query = "SELECT * FROM BillPayers ";
-
+    $join = true;
     if ($result = $mysqli->query($query)) 
     {
 
@@ -61,7 +61,6 @@ if($groupAdmin != "")
 else
 {
     $groupAdmin = $payerID;
-	$groupExists = false;
 }
 
  /**
@@ -73,15 +72,14 @@ if ($userExists)
 {
 	echo "This bill payer is already created, cannot create duplicate account.";
 }
-else if (!$groupExists && $join != "")
+else if (!$groupExists && $join == true)
 {
     echo "No group named $groupName was found with the administrator's username $groupAdmin, could not create account.";
 }
 else if ($result = $mysqli->query($query))
 {
- 	//echo "The bill payer $payerID was created successfully with the group named $groupName!";
-    $result->free();        
-	header("Location: index.html");
+ 	header("Location: index.html");
+	$result->free();        
 }
 
 

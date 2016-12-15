@@ -17,6 +17,7 @@ if ($mysqli->connect_errno) {
     session_start();
     $groupAdmin = "notset";	    
     $groupName = "notset";
+    $email = "notset";
     
     $payerID = $_POST['user'];    
     //$payerID = $mysqli->real_escape_string($payerID)
@@ -40,6 +41,7 @@ if ($result = $mysqli->query($query)) {
 		  $validLogin = true;
 		  $groupAdmin = $row["GroupAdmin"];
 		  $groupName = $row["GroupName"];
+		  $email = $row["Email"];
 		}		
 
     }

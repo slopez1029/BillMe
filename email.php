@@ -12,7 +12,7 @@ $mail->SMTPSecure = 'tls';                            // Enable encryption, only
 
 $mail->From = 'postmaster@sandbox6a69e3c5a27c4e62933347af7f951235.mailgun.org';
 $mail->FromName = 'BillMe';
-$mail->addAddress('slopez1029@yahoo.com');                 // Add a recipient
+$mail->addAddress('9136265955@txt.att.net');                 // Add a recipient
 
 $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
 
