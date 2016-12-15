@@ -1,0 +1,13 @@
+Known Bug List
+•	Bills with the same name paid off on the same day don’t display correctly in history page
+•	If someone sends a confirm request and then leaves the group, the request still remains
+•	Page shifts left if you hit left arrow
+•	Filling in an invalid user on homepage simply refreshes the page (this is programmed in, but ideally an alert would pop up)
+•	Labels left on pie charts
+•	First bill added to the SQL table sometimes loses groupAdmin association
+•	When adding new payers, case of letters is ignored (ex: “new” and “NEW” both added)
+•	Two different users can have the same email- causes problems in database
+•	Bill names do not have option to autofill based on remembered previous bills
+•	Possible to pay more than owed
+•	Text/email notifications seem to work variably depending on service provider/host
+•	Charts percentage display not centered on small displays
