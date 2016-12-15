@@ -7,9 +7,8 @@ $mysqli = new mysqli("mysql.eecs.ku.edu", "slopez", "Password123!", "slopez");
 $payerID = $_POST['name2'];
 $password = $_POST['password2'];
 $groupName = $_POST['group2'];
-$groupAdmin = $_POST['groupAdmin'];
-$join = $_POST['groupAdmin'];
-$email = $_POST['email'];
+$groupAdmin = $_POST['groupAdmin2'];
+$join = $groupAdmin;
 /**
  * Checks to see if SQL connection is properly configured
  */
@@ -61,7 +60,7 @@ if($groupAdmin != "")
 else
 {
     $groupAdmin = $payerID;
-	$groupExists = false;
+    $groupExists = false;
 }
 
  /**
@@ -79,7 +78,7 @@ else if (!$groupExists && $join != "")
 }
 else if ($result = $mysqli->query($query))
 {
-	header("Location: login.html");
+    header("Location: login.html");
     $result->free();        
 }
 

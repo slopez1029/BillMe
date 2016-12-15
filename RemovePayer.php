@@ -53,14 +53,14 @@ if(!empty($_POST['Name']))
 	foreach ($assignedBillArray as $name)
 	{ 	
 		$query = "DELETE FROM UserBills WHERE Name = '$name' AND GroupAdmin = '$groupAdmin' ";
-		if ($result = $mysqli->query($query)){}                                                       
+		if ($result = $mysqli->query($query)){}                                                        
 	}
 	
         /**
 	* Removes payer from group by changing the groupname and groupadmin fields to empty field, not allowing the user to access home navigation.
 	*/
 	$query = "UPDATE BillPayers SET GroupName= '', GroupAdmin= '' WHERE PayerID= '$removedPayer'"; 
-	if ($result = $mysqli->query($query)){}            
+	if ($result = $mysqli->query($query)){}         
 	
 $groupCount = 0;
 $query = "SELECT PayerID FROM BillPayers where GroupAdmin = '$groupAdmin'";

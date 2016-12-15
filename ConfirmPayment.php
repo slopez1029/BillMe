@@ -44,8 +44,11 @@ if(!empty($_POST['checklist']))
 		$type = "PaymentConfirmed";
 		$payString = "";
 		$content = "$payerID has confirmed your payment of $$payAmount for the $nameofbill bill!";
-		
-		//echo "$difference"; echo "$sum";
+		$_SESSSION['EmailGroup'] = "false";
+		$_SESSION['Message'] = "You have confirmed the payment of $$payAmount from $payerID for the $nameofbill bill!";
+		$_SESSION['OtherEmail'] = $payerEmail;
+		$_SESSION['OtherMessage'] = $content;
+
 		/**
 		* This query updates the Bills table with calculated values involving existing table values and 
 		*/
@@ -61,6 +64,9 @@ if(!empty($_POST['checklist']))
 		$query = "DELETE FROM Notifications WHERE PayerID = '$payerID' AND GroupAdmin = '$groupAdmin' ";
 		if ($result = $mysqli->query($query)){ }
 		
+		include 'email.php';
+		$_SESSION['Message'] = $content;
+		$_SESSION['Email'] = $payerEmail;
 		include 'email.php';
 	}
 	

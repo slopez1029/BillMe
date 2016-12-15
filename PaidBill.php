@@ -9,11 +9,14 @@ if ($mysqli->connect_errno)
 }
 
 session_start();
-
 $groupAdmin = $_SESSION['GroupAdmin'];
 $totalDue = 0;
 $dueDate = "";
 $billName = $_POST['Name'];
+
+$_SESSSION['EmailGroup'] = "true";
+$_SESSION['Message'] = "The $billName bill has been paid off!";
+
 if(!empty($_POST['Name'])) 
 {
     
@@ -22,9 +25,9 @@ if(!empty($_POST['Name']))
     {        
         while ($row = $result->fetch_assoc()) 
         {
-			$totalDue = $row["TotalDue"];
-			$dueDate = $row["DueDate"];
-		}
+		$totalDue = $row["TotalDue"];
+		$dueDate = $row["DueDate"];
+	}
     }
 	
     $query = "INSERT INTO PaidBills (Name,TotalDue,DueDate,GroupAdmin) VALUES ('$billName','$totalDue','$dueDate','$groupAdmin')";

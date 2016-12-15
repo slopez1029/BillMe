@@ -1,12 +1,16 @@
 <?php
    include('Session.php');
    session_start();
-
+   if($_SESSION['GroupAdmin'] == '')
+    {
+        header('Location: CreatePayer.html');
+    }
+	$groupAdmin = $_SESSION['GroupAdmin'];
 	$totalDue = 0;
 	$totalPaid = 0;
 	$totalDueArray = Array();
 	$billNameArray = Array();
-    $query = "SELECT TotalDue,TotalPaid,Name FROM Bills";
+    $query = "SELECT TotalDue,TotalPaid,Name FROM Bills WHERE GroupAdmin = '$groupAdmin'";
     if ($result = $mysqli->query($query)) 
     {        
         while ($row = $result->fetch_assoc()) 
@@ -254,13 +258,13 @@
             // (string | mandatory) the heading of the notification
             title: 'Welcome to BillMe!',
             // (string | mandatory) the text inside the notification	
-            text: 'Hover me to enable the Close Button. You can hide the left sidebar clicking on the button next to the logo. Free version for <a href="http://blacktie.co" target="_blank" style="color:#ffd777">BlackTie.co</a>.',
+            text: '<?php echo "Today is " . date("Y/m/d") ?>',
             // (string | optional) the image to display on the left
             image: 'assets/img/ui-sam.jpg',
             // (bool | optional) if you want it to fade out on its own or just sit there
             sticky: false,
             // (int | optional) the time you want it to be alive for before fading out
-            time: '1500',
+            time: '2500',
             // (string | optional) the class name you want to apply to that specific message
             class_name: 'my-sticky-class'
         });

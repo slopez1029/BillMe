@@ -7,7 +7,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>DASHGUM - Bootstrap Admin Template</title>
+    <title>BillMe</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -185,9 +185,11 @@ function required()
         var name = document.forms["form1"]["name"].value;
         var pass = document.forms["form1"]["password"].value;  
         var email = document.forms["form1"]["email"].value; 
-		var group = document.forms["form1"]["group"].value; 
-		var groupAdmin = document.forms["form1"]["groupAdmin"].value; 
-
+	var group = document.forms["form1"]["group"].value; 
+	var groupAdmin = document.forms["form1"]["groupAdmin"].value; 
+	var atpos = email.indexOf("@");
+        var dotpos = email.lastIndexOf(".");
+        
         if (name == "")
         {
 			if(!warning){
@@ -211,11 +213,17 @@ function required()
         }
         else if (email == "")  
         {  
-			document.getElementById("main").className = "alert alert-danger";
+	    document.getElementById("main").className = "alert alert-danger";
             document.getElementById("main").innerHTML = "<strong>Oops!</strong> Enter your email.";
             return false;  
         }  
-		else if (group == "")  
+	else if (atpos<1 || dotpos<atpos+2 || dotpos+2>=email.length)
+	{
+            document.getElementById("main").className = "alert alert-danger";
+            document.getElementById("main").innerHTML = "<strong>Oops!</strong> Enter a valid email.";
+            return false;
+    	}
+	else if (group == "")  
         {  
 			document.getElementById("main").className = "alert alert-danger";
             document.getElementById("main").innerHTML = "<strong>Oops!</strong> Enter the group name.";

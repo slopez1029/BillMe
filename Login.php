@@ -30,6 +30,7 @@ if ($mysqli->connect_errno) {
 	*/
     $query = "SELECT * FROM BillPayers";
     $validLogin = false;
+    $error = false;
     
 if ($result = $mysqli->query($query)) {
 
@@ -57,11 +58,18 @@ if($validLogin)
     $_SESSION['PayerID'] = $payerID;
     $_SESSION['GroupAdmin'] = $groupAdmin;
     $_SESSION['GroupName'] = $groupName;
+    $_SESSION['Email'] = $email;
+    $_SESSION['Message'] = "notset";
+    $_SESSION['EmailGroup'] = "false";
+    $_SESSION['OtherEmail'] = "notset";
+    $_SESSION['OtherMessage'] = "notset";
+
     header('Location: index.html');
 }
 else 
- {
- 	echo "Unsuccessful Login!";
+{
+ 	header('Location: login.html');
+	$error = true;
 
 }
 

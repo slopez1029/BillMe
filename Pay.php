@@ -23,6 +23,7 @@ $groupAdmin = $_SESSION['GroupAdmin'];
 $payAmount = $_POST['totalPaid'];
 $type = "Payment Confirm Request";
 $user = $_SESSION['PayerID'];
+$email = $_SESSION['Email'];
 
 $paid = 0;
 $payerID = "";
@@ -71,7 +72,7 @@ if($payerID != "" && $dueDate != "" )
 	/**
 	* This payString is referenced by the confirmPayment php file, so that bill table values can be updated 
 	*/
-	$payString = "billPayer=$user&billName=$name&payAmount=$payAmount&totalDue=$totalDue&totalPaid=$paid&amtOwed=$amtOwed&amtPaid=$amtPaid";
+	$payString = "billPayer=$user&billName=$name&payAmount=$payAmount&totalDue=$totalDue&totalPaid=$paid&amtOwed=$amtOwed&amtPaid=$amtPaid&$payerEmail=$email";
 	
 	/**
 	* This query is for adding a notification to be seen by the bill owner, making sure the right group is being referenced with session variables.

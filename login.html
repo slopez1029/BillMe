@@ -26,7 +26,7 @@
   </head>
 
   <body>
-	  <a href="https://people.eecs.ku.edu/~tyeasin/BillMe/TestSuite">View Tests</a>
+	<a href="https://people.eecs.ku.edu/~tyeasin/BillMe/TestSuite">View Tests</a>
       <!-- **********************************************************************************************************************************************************
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
@@ -37,13 +37,20 @@
 		      <form class = "form-login" action="Login.php" method="post" id="frontEnd" name = "form1" onsubmit = "return required()">
 		        <h2 class="form-login-heading">sign in now</h2>
 		        <div class="login-wrap">
-		            <input type="text" class="form-control" name="user" id="user" placeholder="User ID" autofocus>
-		            <br>
-		            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-		            <label class="checkbox">
-		                <span class="pull-right">
+		            <div class="starter" id="loginBox">
+				<input type="text" class="form-control" name="user" id="user" placeholder="User ID" autofocus>
+				<br>
+				<input type="password" class="form-control" name="password" id="password" placeholder="Password">
+			    </div>
+			    <script>
+                                var valid = "<?php echo $error; ?>";
+                                if(valid) {
+                                    document.getElementById("loginBox").className = "form-group has-error";
+                                }
+			    </script>	
+			    <label class="checkbox">	                
+				<span class="pull-right">
 		                    <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>
-		
 		                </span>
 		            </label>
 		            <button class="btn btn-theme btn-block" href="index.html" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
@@ -52,7 +59,6 @@
 		            <div class="login-social-link centered">
 		            <p>or you can sign in via your social network</p>
 		                <button class="btn btn-facebook" type="submit"><i class="fa fa-facebook"></i> Facebook</button>
-		                <button class="btn btn-twitter" type="submit"><i class="fa fa-twitter"></i> Twitter</button>
 		            </div>
 		            <div class="registration">
 		                Don't have an account yet?<br/>
